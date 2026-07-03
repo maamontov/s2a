@@ -1,0 +1,18 @@
+[package]
+name = "s2a"
+version = "1.0.0"
+description = "Sprite atlas generator"
+authors = ["maamontov"]
+edition = "2021"
+
+[lib]
+name = "s2a_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"

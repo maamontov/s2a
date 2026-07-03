@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1117" />
+    <title>s2a - генератор атласа из спрайтов</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="s2a — sprites to atlas">s2a</a>
+      <div class="topbar-meta"><span class="privacy-dot"></span> Локальная обработка</div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <section class="intro">
+          <span class="eyebrow">ATLAS BUILDER</span>
+          <h1>Спрайты —<br /><em>в один атлас.</em></h1>
+          <p>Импортируйте файлы или целую структуру папок. Экспортируйте готовую текстуру и метаданные для движка.</p>
+        </section>
+
+        <section class="panel import-panel">
+          <div class="section-title"><span>01</span><h2>Исходники</h2></div>
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Добавить изображения">
+            <div class="drop-icon">+</div>
+            <strong>Перетащите спрайты сюда</strong>
+            <small>PNG, WebP, JPEG · папки поддерживаются</small>
+            <div class="import-actions">
+              <button id="pickFiles" class="button secondary">Выбрать файлы</button>
+              <button id="pickFolder" class="button secondary">Выбрать папку</button>
+            </div>
+          </div>
+          <input id="fileInput" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden />
+          <input id="folderInput" type="file" accept="image/png,image/webp,image/jpeg" webkitdirectory multiple hidden />
+
+          <div class="file-summary">
+            <div><b id="spriteCount">0</b><span>спрайтов</span></div>
+            <div><b id="sourceSize">0 KB</b><span>исходники</span></div>
+            <button id="clearFiles" class="icon-button" title="Очистить список" disabled>×</button>
+          </div>
+          <div id="fileList" class="file-list empty"><span>Здесь появятся загруженные файлы</span></div>
+        </section>
+
+        <section class="panel settings-panel">
+          <div class="section-title"><span>02</span><h2>Упаковка</h2></div>
+          <div class="fields-grid">
+            <label class="field"><span>Padding</span><div class="number-control"><input id="padding" type="number" min="0" max="32" value="2" /><b>px</b></div></label>
+            <label class="field"><span>Max size</span><select id="maxSize"><option>1024</option><option selected>2048</option><option>4096</option><option>8192</option></select></label>
+          </div>
+          <label class="toggle-row"><span><b>Степень двойки</b><small>Размер 256, 512, 1024…</small></span><input id="powerOfTwo" type="checkbox" checked /><i></i></label>
+          <label class="toggle-row"><span><b>Обрезать прозрачность</b><small>Удалить пустые края</small></span><input id="trim" type="checkbox" /><i></i></label>
+        </section>
+      </aside>
+
+      <section class="stage">
+        <div class="stage-toolbar">
+          <div>
+            <span class="status-label">PREVIEW</span>
+            <strong id="atlasDimensions">— × —</strong>
+          </div>
+          <div class="preview-tools">
+            <label class="guides-toggle" title="Показать границы фреймов">
+              <input id="showGuides" type="checkbox" />
+              <i aria-hidden="true"></i>
+              <span>Границы</span>
+            </label>
+            <div class="zoom-control">
+              <button id="zoomOut" aria-label="Уменьшить">−</button>
+              <span id="zoomValue">100%</span>
+              <button id="zoomIn" aria-label="Увеличить">+</button>
+              <button id="fitView" class="fit-button">Вписать</button>
+            </div>
+          </div>
+        </div>
+        <div id="canvasViewport" class="canvas-viewport">
+          <div id="emptyState" class="empty-state">
+            <div class="empty-tiles"><i></i><i></i><i></i></div>
+            <h2>Атлас пока пуст</h2>
+            <p>Добавьте спрайты слева — предпросмотр<br />обновится автоматически.</p>
+          </div>
+          <div id="canvasSurface" class="canvas-surface" hidden>
+            <canvas id="atlasCanvas"></canvas>
+            <canvas id="guidesCanvas" aria-hidden="true" hidden></canvas>
+          </div>
+        </div>
+        <footer class="export-bar">
+          <div class="export-format">
+            <label for="exportFormat">Формат метаданных</label>
+            <select id="exportFormat">
+              <option value="pixi">Pixi.js / Phaser JSON</option>
+              <option value="godot">Godot SpriteFrames (.tres)</option>
+              <option value="generic">Generic JSON</option>
+            </select>
+          </div>
+          <div class="export-actions">
+            <button id="downloadPng" class="button secondary" disabled>Скачать PNG</button>
+            <button id="downloadData" class="button primary" disabled>Скачать метаданные <span>↗</span></button>
+          </div>
+        </footer>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
